@@ -9,7 +9,7 @@ connectDB();
 app.use(express.json());
 
 app.use('/api',router);
-app.use('/api',router);
+app.use('/api/employees',router);
 
 app.get('/api/employees',authMiddleware,(req,res)=>{
     res.send('Hello World');
