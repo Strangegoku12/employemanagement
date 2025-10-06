@@ -3,10 +3,12 @@ const app=express();
 const connectDB=require('./DB/connect')
 const router=require('./Route/route');
 const authMiddleware = require('./Authmiddleware/auth');
+const cors = require('cors');
+app.use(cors());
+app.use(express.json());
 
 
 connectDB();
-app.use(express.json());
 
 app.use('/api',router);
 app.use('/api/employees',router);
