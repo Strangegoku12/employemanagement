@@ -8,7 +8,8 @@ const jwtsecret='1234'
 
 // register route
 router.post('/register',async (req,res)=>{
-    const {name,email,password}=req.body;
+    const { name, email, password } = req.body.register; //  this line changed
+
     try{
         const existingUser =await User.findOne({
             email:email
@@ -35,7 +36,7 @@ router.post('/register',async (req,res)=>{
 
 //login route
 router.post('/login',async(req,res)=>{
-    const {email,password}=req.body;
+    const {email,password}=req.body.login;
     try{
         const loginuser=await User.findOne({email})
         if(!loginuser){
@@ -49,7 +50,8 @@ router.post('/login',async(req,res)=>{
     const payload = {
       id: loginuser._id,
       email: loginuser.email,
-      name: loginuser.name
+      name: loginuser.name,
+      role: loginuser.role
     };
 
         const token = jwt.sign(payload,jwtsecret, { expiresIn: '7d' });
@@ -60,7 +62,8 @@ router.post('/login',async(req,res)=>{
       token: token,
       user: {
         name: loginuser.name,
-        email: loginuser.email
+        email: loginuser.email,
+        role: loginuser.role
       }
     });
     }catch(err){
