@@ -4,18 +4,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { EmployementapiService } from '../../Services/employementapi.service';
 
-interface Employee {
-  name?: string;
-  email?: string;
-  employeid?: string;
-  date_of_birth?: string;
-  gender?: string;
-  marital_status?: string;
-  designation?: string;
-  department?: string;
-  salary?: string;
-  password?: string;
-}
+// interface Employee {
+//   name?: string;
+//   email?: string;
+//   employeid?: string;
+//   date_of_birth?: string;
+//   gender?: string;
+//   marital_status?: string;
+//   designation?: string;
+//   department?: string;
+//   salary?: string;
+//   password?: string;
+// }
 
 @Component({
   selector: 'app-employer',
@@ -27,7 +27,7 @@ export class EmployerComponent {
   showForm = false;
   employerForm!: FormGroup;
 
-  employees: Employee[] = [];
+  employees: any[] = [];
 
   constructor(private fb: FormBuilder, private getemployement: EmployementapiService) {
     this.employerForm = this.fb.group({
@@ -84,15 +84,22 @@ getallemployess() {
     }
   }
 
-  save(emp: any) {
-    alert(`Saved changes for ${emp.name}`);
-  }
 
   edit(emp: any) {
     alert(`Edit ${emp.name}`);
   }
 
   delete(emp: any) {
+    this.getemployement.deleteemployement(emp._id).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.removeEmployeeFromList(emp);
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  removeEmployeeFromList(emp: any) {
     this.employees = this.employees.filter(e => e !== emp);
   }
 }
