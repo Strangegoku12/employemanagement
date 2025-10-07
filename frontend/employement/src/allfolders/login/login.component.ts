@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthapiService } from '../../Services/authapi.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class LoginComponent {
 loginForm:any
 registerForm:any
-  constructor(private fb: FormBuilder,private auth:AuthapiService) {
+  constructor(private fb: FormBuilder,private auth:AuthapiService,private router:Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -33,6 +34,7 @@ registerForm:any
   onLogin() {
   this.auth.login(this.loginForm.value).subscribe(res=>{
     console.log(res);
+    this.router.navigate(['employer']);
   })
   }
   onRegister(){
