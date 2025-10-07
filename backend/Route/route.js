@@ -73,15 +73,16 @@ router.post('/login',async(req,res)=>{
 })
 
 // Employee Management routes (CRUD operations) can be added here
- router.get('/getemployees',async(req,res)=>{
-    try{
-        const employee=await employees.find();
-        res.status(200).json(employee);
-    }catch(err){
+router.get('/getemployees', async (req, res) => {
+    try {
+        const employee = await employees.find();
+        res.status(200).json({ employees: employee }); // ✅ employees array wrap kiya
+    } catch (err) {
         console.log('Error:', err);
         res.status(500).json({ message: 'Server error' });
     }
-    })
+});
+
 
 // employess creation post
 router.post('/postemployees', async (req, res) => {
@@ -102,7 +103,7 @@ router.post('/postemployees', async (req, res) => {
             department,
             salary,
             password
-        } = req.body;
+        } = req.body.employement;
 
         // check for missing fields
         if (
