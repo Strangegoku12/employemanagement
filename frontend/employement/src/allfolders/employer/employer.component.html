@@ -1,0 +1,122 @@
+<div class="flex min-h-screen bg-gray-100">
+  <!-- Sidebar (Left - 30%) -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content (Right - 70%) -->
+  <main class="flex-1 p-8">
+
+    <!-- Header with Add Employer button -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold">Employee Management</h2>
+      <button
+        (click)="openForm()"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow-md transition-all">
+        + Add Employer
+      </button>
+    </div>
+
+    <!-- Employee Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-md">
+      <table class="w-full border-collapse">
+        <thead class="bg-indigo-100 text-indigo-800">
+          <tr>
+            <th class="text-left py-3 px-5">Employee Name</th>
+            <th class="text-left py-3 px-5">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let emp of employees"
+            class="border-b hover:bg-gray-50 transition"
+          >
+            <td class="py-3 px-5 font-medium">{{ emp.name }}</td>
+            <td class="py-3 px-5 space-x-2">
+              <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600" (click)="edit(emp)">Edit</button>
+              <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" (click)="delete(emp)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add Employer Modal -->
+     <div
+      *ngIf="showForm"
+      class="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-2/3 relative">
+        <button
+          (click)="closeForm()"
+          class="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-xl font-bold"
+        >
+          ✕
+        </button>
+        <h3 class="text-xl font-semibold mb-4 text-indigo-700">Add Employer</h3>
+
+        <form (ngSubmit)="submitForm()" [formGroup]="employerForm" class="grid grid-cols-2 gap-5">
+          <div>
+            <label class="block mb-1 text-gray-700">Name</label>
+            <input formControlName="name" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Email</label>
+            <input formControlName="email" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Employee ID</label>
+            <input formControlName="employeid" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Date of Birth</label>
+            <input type="date" formControlName="date_of_birth" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Gender</label>
+            <select formControlName="gender" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Marital Status</label>
+            <select formControlName="marital_status" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none">
+              <option>Single</option>
+              <option>Married</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Designation</label>
+            <input formControlName="designation" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Department</label>
+            <input formControlName="department" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Salary</label>
+            <input type="number" formControlName="salary" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Password</label>
+            <input type="password" formControlName="password" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div class="col-span-2 text-right mt-4">
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>  </main>
+</div>
