@@ -42,4 +42,6 @@ registerForm:any
     console.log(res);
   })
   }
+
+  
 }

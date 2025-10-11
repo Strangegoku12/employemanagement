@@ -1,18 +1,19 @@
-# Use official Node image
+# Use Node.js 18
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install deps
+# Copy only dependency files first (for caching)
 COPY package*.json ./
-RUN npm install
 
-# Copy all source code
+# Install dependencies
+RUN npm install -g @angular/cli && npm install
+
+# Copy project files
 COPY . .
 
-# Expose Angular default port
+# Expose Angular's default dev port
 EXPOSE 4200
 
-# Start the Angular dev server
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0"]
+# Start Angular dev server
+CMD ["npm", "start"]

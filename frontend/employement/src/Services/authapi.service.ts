@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -11,10 +12,13 @@ export class AuthapiService {
   baseUrl = 'http://localhost:3000/api';
  login(login:string): Observable<any> {
     const url = `${this.baseUrl}/login`;
-    return this.http.post(url, {login}).pipe(
+    return this.http.post<any>(url, {login}).pipe(
       map((response) => {
         // manipulate or log data here
-        console.log('Login Success:', response);
+
+        const token=response.token
+        localStorage.setItem('token',token)
+        console.log('Login Success:', token);
         return response;
       }),
       catchError((error) => {
@@ -39,5 +43,20 @@ export class AuthapiService {
         return throwError(() => error);
       })
     );
+  }
+
+   getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if(!token) return null;
+    const decoded: any = jwtDecode(token);
+    return decoded.role || null;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
   }
 }
