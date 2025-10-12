@@ -28,6 +28,7 @@ export class EmployerComponent {
   employerForm!: FormGroup;
 
   employees: any[] = [];
+  currentEditingEmployeeId: any;
 
   constructor(private fb: FormBuilder, private getemployement: EmployementapiService) {
     this.employerForm = this.fb.group({
@@ -68,25 +69,44 @@ getallemployess() {
 
 
 
-  submitForm() {
-    if (this.employerForm.valid) {
-      console.log('Form Submitted:', this.employerForm.value);
-      this.getemployement.addemployement(this.employerForm.value).subscribe({
-        next: (res) => {
-          console.log(res);
-          this.getallemployess(); // Refresh the employee list
-        },
-        error: (err) => console.error(err)
-      });
-      this.closeForm();
-    } else {
-      alert('Please fill all fields correctly!');
-    }
+ submitForm() {
+  if (!this.employerForm.valid) {
+    alert('Please fill all fields correctly!');
+    return;
   }
+
+  const formValue = this.employerForm.value;
+
+  if (this.currentEditingEmployeeId) {
+    // Edit mode
+    this.getemployement.editemployement(this.currentEditingEmployeeId, formValue).subscribe({
+      next: (res) => {
+        console.log('Employee updated:', res);
+        this.getallemployess(); // Refresh list
+      },
+      error: (err) => console.error(err)
+    });
+  } else {
+    // Add mode
+    this.getemployement.addemployement(formValue).subscribe({
+      next: (res) => {
+        console.log('Employee added:', res);
+        this.getallemployess();
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  this.closeForm();
+  this.currentEditingEmployeeId = null; // reset edit mode
+}
 
 
   edit(emp: any) {
-    alert(`Edit ${emp.name}`);
+    this.showForm = true;
+    this.employerForm.patchValue(emp);
+    this.currentEditingEmployeeId = emp._id; // set current editing employee ID
+
   }
 
   delete(emp: any) {
