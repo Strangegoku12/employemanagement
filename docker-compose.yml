@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: node_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGO_URI=mongodb+srv://anany:anany123@cluster0.j0uhrrv.mongodb.net/employmentDB?retryWrites=true&w=majority&appName=Cluster0
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend/employement
+    container_name: angular_frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend/employement:/app
+      # 🚫 REMOVE the /app/node_modules line
+    depends_on:
+      - backend
+    restart: always
+    command: npm start

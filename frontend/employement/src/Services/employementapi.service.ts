@@ -66,4 +66,19 @@ export class EmployementapiService {
       })
     );
   }
+  editemployement(empid:any, emp:any): Observable<any> {
+     const url = `${this.baseUrl}/updateemployee/${empid}`;
+    return this._http.put(url, {emp}).pipe(
+      map((response) => {
+        // manipulate or log data here
+        console.log('update Success:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Login Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  // /updateemployee/:id
 }
