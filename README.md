@@ -22,12 +22,13 @@ git clone https://github.com/Strangegoku12/employemanagement.git
 cd employemanagement
 
 ### Run Docker Compose
-To build and start all the necessary containers, run: docker-compose up -d
+To build and start all the necessary containers, run:
+docker-compose up -d
 
 This will pull the required images, build containers if needed, and start all services in detached mode.
 
 ### Running the Project
-After running the containers, the application will be accessible at:http://localhost:3000
+After running the containers, the application will be accessible at: http://localhost:3000
 You can now interact with the Employee Management System through your browser.
 
 ## Why Use Docker?
