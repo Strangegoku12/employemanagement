@@ -1,4 +1,4 @@
-name: Docker Build & Push CI
+name: Docker Image CI
 
 on:
   push:
@@ -7,42 +7,10 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      # Enable Docker Buildx (multi-platform support)
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # Authenticate to Docker Hub using GitHub Secrets
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      ######################################
-      # Backend Image Build & Push
-      ######################################
-      - name: Build Backend Image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest ./backend
-
-      - name: Push Backend Image
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
-
-      ######################################
-      # Frontend Image Build & Push
-      ######################################
-      - name: Build Frontend Image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest ./frontend/employement
-
-      - name: Push Frontend Image
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+    - uses: actions/checkout@v4
+    - run: docker build . -t strangecode/employement
+    - run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
+    - run: docker push docker push strangecode/employement:latest
