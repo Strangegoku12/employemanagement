@@ -22,8 +22,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/employement:latest .
+      # Build backend
+      - name: Build backend image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/employement-backend:latest ./backend
 
-      - name: Push image to DockerHub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/employement:latest
+      # Build frontend
+      - name: Build frontend image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/employement-frontend:latest ./frontend/employement
+
+      # Push both images
+      - name: Push images to DockerHub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/employement-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/employement-frontend:latest
