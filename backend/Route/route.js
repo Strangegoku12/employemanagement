@@ -6,33 +6,6 @@ const jwt = require('jsonwebtoken');
 const employees = require('../Models/EmployementSchema');
 const jwtsecret='1234'
 
-// register route
-router.post('/register',async (req,res)=>{
-    const { name, email, password } = req.body.register; //  this line changed
-
-    try{
-        const existingUser =await User.findOne({
-            email:email
-        })
-        if(existingUser){
-            return res.status(400).json({message:'User already exists'});
-        }
-
-        const hashedpassword=await bcrypt.hash(password,10);
-        const newUser=new User({
-            name,
-            email,
-            password:hashedpassword,
-        })
-
-        await newUser.save();
-        res.status(201).json({message:'User registered successfully'});
-
-    }catch(err){
-           console.log('Error:', err);
-    res.status(500).json({ message: 'Server error' });
-    }
-})
 
 //login route
 router.post('/login',async(req,res)=>{
