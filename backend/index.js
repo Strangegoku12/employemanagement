@@ -4,6 +4,7 @@ const connectDB=require('./DB/connect')
 const router=require('./Route/route');
 const authMiddleware = require('./Authmiddleware/auth');
 const cors = require('cors');
+const leaveroute=require('./Route/leaveroute');
 app.use(cors());
 app.use(express.json());
 
@@ -12,6 +13,7 @@ connectDB();
 
 app.use('/api',router);
 app.use('/api/employees',router);
+app.use('/api',authMiddleware,leaveroute);
 
 app.get('/api/employees',authMiddleware,(req,res)=>{
     res.send('Hello World');

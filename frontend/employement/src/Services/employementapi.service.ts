@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, throwError, Observable } from 'rxjs';
+import { AuthapiService } from './authapi.service';
 // export interface Employee {
 //   _id?: string;
 //   name: string;
@@ -20,7 +21,7 @@ import { catchError, map, throwError, Observable } from 'rxjs';
 })
 export class EmployementapiService {
 
-  constructor(private _http:HttpClient) { }
+  constructor(private _http:HttpClient,private authheader:AuthapiService) { }
   baseUrl = 'http://localhost:3000/api';
 
   getallemployementapi(): Observable<any>{
@@ -80,5 +81,52 @@ export class EmployementapiService {
       })
     );
   }
-  // /updateemployee/:id
+  // /updateemployee/:id/
+
+     addleave(leave:string): Observable<any> {
+    const url = `${this.baseUrl}/applyleave`;
+      const headers = this.authheader.getAuthHeaders(); //
+    return this._http.post(url, {leave},{headers}).pipe(
+      map((response) => {
+        // manipulate or log data here
+        console.log('Login Success:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Login Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+    getleave(): Observable<any>{
+            const headers = this.authheader.getAuthHeaders(); //
+
+    return this._http.get(this.baseUrl + '/myleaves',{headers}).pipe(
+          map((response) => {
+            // manipulate or log data here
+            console.log('Login Success:', response);
+            return response;
+          }),
+          catchError((error) => {
+            console.error('Login Error:', error);
+            return throwError(() => error);
+          })
+    );
+  }
+
+    deleteleave(empid:any){
+     const url = `${this.baseUrl}/deleteleave/${empid}`;
+           const headers = this.authheader.getAuthHeaders(); //
+    return this._http.delete(url,{headers}).pipe(
+      map((response) => {
+        // manipulate or log data here
+        console.log('delete Success:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Login Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }
