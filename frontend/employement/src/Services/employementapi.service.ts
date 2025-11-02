@@ -38,9 +38,9 @@ export class EmployementapiService {
     );
   }
 
-   addemployement(employement:string): Observable<any> {
+   addemployement(employement:FormData): Observable<any> {
     const url = `${this.baseUrl}/postemployees`;
-    return this._http.post(url, {employement}).pipe(
+    return this._http.post(url, employement).pipe(
       map((response) => {
         // manipulate or log data here
         console.log('Login Success:', response);
@@ -81,7 +81,8 @@ export class EmployementapiService {
       })
     );
   }
-  // /updateemployee/:id/
+
+  // leave api
 
      addleave(leave:string): Observable<any> {
     const url = `${this.baseUrl}/applyleave`;
@@ -98,6 +99,8 @@ export class EmployementapiService {
       })
     );
   }
+
+  // get leaves
     getleave(): Observable<any>{
             const headers = this.authheader.getAuthHeaders(); //
 
@@ -114,9 +117,12 @@ export class EmployementapiService {
     );
   }
 
+  // Delete Leaves
     deleteleave(empid:any){
      const url = `${this.baseUrl}/deleteleave/${empid}`;
            const headers = this.authheader.getAuthHeaders(); //
+           console.log("shwo teh heades",headers);
+
     return this._http.delete(url,{headers}).pipe(
       map((response) => {
         // manipulate or log data here
@@ -129,4 +135,78 @@ export class EmployementapiService {
       })
     );
   }
+
+  // approvedata
+approveleaves(empid: any): Observable<any> {
+  const url = `${this.baseUrl}/approveleave/${empid}`;
+  const headers = this.authheader.getAuthHeaders(); // should return HttpHeaders
+
+  console.log("show the headers", headers);
+
+  return this._http.put(url, {}, { headers }).pipe(
+    map((response) => {
+      console.log('Update Success:', response);
+      return response;
+    }),
+    catchError((error) => {
+      console.error('Update Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
+
+// rejected leaves
+rejectedleaves(empid: any): Observable<any> {
+  const url = `${this.baseUrl}/rejectleave/${empid}`;
+  const headers = this.authheader.getAuthHeaders(); // should return HttpHeaders
+
+  console.log("show the headers", headers);
+
+  return this._http.put(url, {}, { headers }).pipe(
+    map((response) => {
+      console.log('Update Success:', response);
+      return response;
+    }),
+    catchError((error) => {
+      console.error('Update Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
+
+// salary api
+      addsalary(salary:string): Observable<any> {
+    const url = `${this.baseUrl}/addsalary`;
+      const headers = this.authheader.getAuthHeaders(); //
+    return this._http.post(url, {salary},{headers}).pipe(
+      map((response) => {
+        // manipulate or log data here
+        console.log('Login Success:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Login Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // get salary
+  getsalary(): Observable<any>{
+    const headers = this.authheader.getAuthHeaders(); //
+    return this._http.get(this.baseUrl + '/mysalaries',{headers}).pipe(
+          map((response) => {
+            // manipulate or log data here
+            console.log('Login Success:', response);
+            return response;
+          }),
+          catchError((error) => {
+            console.error('Login Error:', error);
+            return throwError(() => error);
+          })
+    );
+  }
+
 }

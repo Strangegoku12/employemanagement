@@ -4,6 +4,98 @@
 
   <!-- Main Content (Right - 70%) -->
   <main class="flex-1 p-8">
-<h1>salary</h1>
-  </main>
+
+    <!-- Header with Add Employer button -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold">Salary Management</h2>
+      <button *ngIf="userRole === 'admin'"
+        (click)="openForm()"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow-md transition-all">
+        + Add Salary
+      </button>
+    </div>
+
+    <!-- Employee Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-md">
+      <table class="w-full border-collapse">
+        <thead class="bg-indigo-100 text-indigo-800">
+          <tr>
+            <th class="text-left py-3 px-5">Employee Name</th>
+            <th class="text-left py-3 px-5">Salary</th>
+            <th class="text-left py-3 px-5">Allowance</th>
+            <th class="text-left py-3 px-5">Deduction</th>
+            <th class="text-left py-3 px-5">Total</th>
+           <th class="text-left py-3 px-5">Pay Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let emp of salary"
+            class="border-b hover:bg-gray-50 transition"
+          >
+            <td class="py-3 px-5 font-medium">{{ emp.name }}</td>
+            <td class="py-3 px-5 font-medium">{{ emp.salary }}</td>
+            <td class="py-3 px-5 font-medium">{{ emp.allowance }}</td>
+            <td class="py-3 px-5 font-medium">{{ emp.deduction }}</td>
+            <td class="py-3 px-5 font-medium">{{ emp.total }}</td>
+            <td class="py-3 px-5 font-medium">{{ emp.paydate | date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add Employer Modal -->
+     <div
+      *ngIf="showForm"
+      class="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-2/3 relative">
+        <button
+          (click)="closeForm()"
+          class="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-xl font-bold"
+        >
+          ✕
+        </button>
+        <h3 class="text-xl font-semibold mb-4 text-indigo-700">Add Salay</h3>
+
+        <form  [formGroup]="salaryform" class="grid grid-cols-2 gap-5">
+
+          <div>
+            <label class="block mb-1 text-gray-700">Name</label>
+            <input formControlName="name" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Salary</label>
+            <input type="number" formControlName="salary" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Allowance</label>
+            <input type="number" formControlName="allowance" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Deduction</label>
+            <input formControlName="deduction" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Total</label>
+            <input formControlName="total" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-gray-700">Pay Date</label>
+            <input type="date" formControlName="paydate" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
+          </div>
+
+          <div class="col-span-2 text-right mt-4">
+            <button type="submit" (click)="submitForm()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>  </main>
 </div>

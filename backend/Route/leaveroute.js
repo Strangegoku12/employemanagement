@@ -51,9 +51,6 @@ router.delete('/deleteleave/:id', authMiddleware, async (req, res) => {
     if (!leave) {
         return res.status(404).json({ message: 'Leave application not found' });
     }
-    // if (leave.employeid !== req.user.id) {
-    //     return res.status(403).json({ message: 'Unauthorized' });
-    // }
     await LeaveSchema.findByIdAndDelete(req.params.id);
     res.json({ message: 'Leave application deleted successfully' });
     } catch (err) {
@@ -61,5 +58,39 @@ router.delete('/deleteleave/:id', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
     }
 });
+
+// Approve leave application
+router.put('/approveleave/:id', authMiddleware, async (req, res) =>{
+    try {
+        const leave = await LeaveSchema.findById(req.params.id);
+        if (!leave) {
+            return res.status(404).json({ message: 'Leave application not found' });
+        }
+        leave.status = 'approved';
+        await leave.save();
+        res.json({ message: 'Leave application approved successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+
+    }
+})
+
+
+router.put('/rejectleave/:id', authMiddleware, async (req, res) =>{
+    try {
+        const leave = await LeaveSchema.findById(req.params.id);
+        if (!leave) {
+            return res.status(404).json({ message: 'Leave application not found' });
+        }
+        leave.status = 'rejected';
+        await leave.save();
+        res.json({ message: 'Leave application reject successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+
+    }
+})
 
 module.exports=router;

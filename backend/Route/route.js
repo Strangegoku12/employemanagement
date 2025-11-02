@@ -5,6 +5,20 @@ const User = require('../Models/RegisterSchema');
 const jwt = require('jsonwebtoken');
 const employees = require('../Models/EmployementSchema');
 const jwtsecret='1234'
+const multer=require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './storage/uploads'); // folder where images will be saved
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  }
+});
+
+//  Create multer upload instance
+const upload = multer({ storage: storage });
 
 
 //login route
@@ -47,18 +61,26 @@ router.post('/login',async(req,res)=>{
 
 // Employee Management routes (CRUD operations) can be added here
 router.get('/getemployees', async (req, res) => {
-    try {
-        const employee = await employees.find();
-        res.status(200).json({ employees: employee }); // ✅ employees array wrap kiya
-    } catch (err) {
-        console.log('Error:', err);
-        res.status(500).json({ message: 'Server error' });
-    }
+  try {
+    const employeesList = await employees.find();
+
+    const updatedList = employeesList.map(emp => ({
+      ...emp._doc,
+      image: emp.image ? `${req.protocol}://${req.get('host')}/${emp.image}` : null
+    }));
+
+    res.json({ employees: updatedList });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 
+
+
 // employess creation post
-router.post('/postemployees', async (req, res) => {
+router.post('/postemployees', upload.single('image'), async (req, res) => {
 
     const alreademployee= await employees.findOne({employeid:req.body.employeid});
     if(alreademployee){
@@ -76,7 +98,7 @@ router.post('/postemployees', async (req, res) => {
             department,
             salary,
             password
-        } = req.body.employement;
+        } = req.body;
 
         // check for missing fields
         if (
@@ -99,6 +121,7 @@ router.post('/postemployees', async (req, res) => {
             designation,
             department,
             salary,
+         image: req.file ? req.file.path : null, // 🖼 store image path
             password: hashedPassword
         });
 
