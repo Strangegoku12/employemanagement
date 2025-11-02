@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { EmployementapiService } from '../../Services/employementapi.service';
+import { AuthapiService } from '../../Services/authapi.service';
 @Component({
   selector: 'app-leave',
   imports: [CommonModule, ReactiveFormsModule, SidebarComponent],
@@ -15,8 +16,9 @@ export class LeaveComponent {
 
   employees: any[] = [];
   currentEditingEmployeeId: any;
+  userRole: any
 
-  constructor(private fb: FormBuilder, private getemployement: EmployementapiService) {
+  constructor(private fb: FormBuilder, private getemployement: EmployementapiService,private authService:AuthapiService) {
     this.leaveform = this.fb.group({
       name: [''],
       from_date: [''],
@@ -27,6 +29,8 @@ export class LeaveComponent {
 
   ngOnInit() {
     this.getallemployess();
+      this.userRole = this.authService.getUserRole();
+        console.log("shwot yeh this tole",this.userRole);
   }
 
   openForm() {
@@ -102,4 +106,25 @@ getallemployess() {
   removeEmployeeFromList(emp: any) {
     this.employees = this.employees.filter(e => e !== emp);
   }
+approveleave(emp:any){
+   this.getemployement.approveleaves(emp._id).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.getallemployess();
+      }
+      ,
+      error: (err) => console.error(err)
+    });
+}
+rejectleave(emp:any){
+   this.getemployement.rejectedleaves(emp._id).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.getallemployess();
+      }
+      ,
+      error: (err) => console.error(err)
+    });
+}
+
 }

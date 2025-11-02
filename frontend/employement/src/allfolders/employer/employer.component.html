@@ -21,6 +21,8 @@
         <thead class="bg-indigo-100 text-indigo-800">
           <tr>
             <th class="text-left py-3 px-5">Employee Name</th>
+                        <th class="text-left py-3 px-5">iamge Name</th>
+
             <th class="text-left py-3 px-5">Actions</th>
           </tr>
         </thead>
@@ -30,6 +32,12 @@
             class="border-b hover:bg-gray-50 transition"
           >
             <td class="py-3 px-5 font-medium">{{ emp.name }}</td>
+              <img
+    *ngIf="emp.image"
+    [src]="emp.image"
+    alt="Employee Image"
+    class="h-16 w-16 rounded-full object-cover border"
+  />
             <td class="py-3 px-5 space-x-2">
               <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600" (click)="edit(emp)">Edit</button>
               <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" (click)="delete(emp)">Delete</button>
@@ -73,6 +81,16 @@
             <label class="block mb-1 text-gray-700">Date of Birth</label>
             <input type="date" formControlName="date_of_birth" class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none" />
           </div>
+          <div>
+  <label class="block mb-1 text-gray-700">Upload Image</label>
+  <input
+    type="file"
+    #fileInput
+    accept="image/*"
+    class="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+  />
+</div>
+
 
           <div>
             <label class="block mb-1 text-gray-700">Gender</label>

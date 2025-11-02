@@ -8,7 +8,7 @@
     <!-- Header with Add Employer button -->
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-semibold">Leave Management</h2>
-      <button
+      <button *ngIf="userRole === 'employee'"
         (click)="openForm()"
         class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow-md transition-all">
         + Add Leave
@@ -24,7 +24,9 @@
             <th class="text-left py-3 px-5">From Date</th>
             <th class="text-left py-3 px-5">To Date</th>
             <th class="text-left py-3 px-5">Reason</th>
-            <th class="text-left py-3 px-5">Actions</th>
+            <th class="text-left py-3 px-5">Status</th>
+            <th *ngIf="userRole === 'admin'" class="text-left py-3 px-5">Actions</th>
+            <th *ngIf="userRole === 'employee' "class="text-left py-3 px-5">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -36,7 +38,12 @@
             <td class="py-3 px-5 font-medium">{{ emp.from_date | date }}</td>
             <td class="py-3 px-5 font-medium">{{ emp.to_date | date }}</td>
             <td class="py-3 px-5 font-medium">{{ emp.reason }}</td>
-            <td class="py-3 px-5 space-x-2">
+            <td class="py-3 px-5 font-medium">{{ emp.status }}</td>
+            <td *ngIf="userRole === 'admin'" class="py-3 px-5 space-x-2">
+              <button class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" (click)="approveleave(emp)" >Approve</button>
+              <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" (click)="rejectleave(emp)" >Reject</button>
+            </td>
+            <td *ngIf="userRole === 'employee'" class="py-3 px-5 space-x-2">
               <!-- <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600" (click)="edit(emp)">Edit</button> -->
               <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" (click)="delete(emp)">Delete</button>
             </td>
