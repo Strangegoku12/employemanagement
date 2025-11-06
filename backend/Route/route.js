@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const employees = require('../Models/EmployementSchema');
 const jwtsecret='1234'
 const multer=require('multer');
+const authMiddleware = require('../Authmiddleware/auth');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -163,5 +164,27 @@ router.put('/updateemployee/:id', async (req, res) => {
         console.error('Error:', err);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+router.get('/profile', authMiddleware, async (req, res) => {
+  try {
+    console.log("User Object:", req.user);
+
+    if (!req.user || !req.user.id) {
+      return res.status(400).json({ message: 'User not authenticated or invalid token' });
+    }
+
+    const userProfile = await employees.findById(req.user.id);
+    if (!userProfile) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    console.log("User profile:", userProfile);
+    res.status(200).json(userProfile);
+
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 module.exports=router;
