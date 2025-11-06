@@ -1,9 +1,100 @@
 <div class="flex min-h-screen bg-gray-100">
-  <!-- Sidebar (Left - 30%) -->
+  <!-- Sidebar -->
   <app-sidebar></app-sidebar>
 
-  <!-- Main Content (Right - 70%) -->
-  <main class="flex-1 p-8">
-<h1>dashboardssws</h1>
+  <!-- Main Dashboard Content -->
+  <main class="flex-1 bg-gray-50">
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white py-6 px-10 shadow-md flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Employee Dashboard</h1>
+      <div class="text-right">
+        <p class="text-sm text-indigo-100">Welcome back,</p>
+        <p class="font-semibold">{{ employeesdata.name }}</p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="p-10 space-y-10">
+      <!-- Profile Identity Card -->
+      <div class="bg-white shadow-lg rounded-2xl p-8 flex flex-col md:flex-row items-center md:items-start gap-8">
+        <!-- Profile Picture -->
+        <div class="relative">
+          <img
+            [src]="employeesdata.image || 'assets/profile-placeholder.png'"
+            alt="Profile Photo"
+            class="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
+          />
+          <span
+            class="absolute bottom-3 right-3 bg-green-500 h-5 w-5 rounded-full border-2 border-white"
+            title="Active"
+          ></span>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="flex-1">
+          <h2 class="text-3xl font-semibold text-gray-800">{{ employeesdata.name }}</h2>
+          <p class="text-gray-500 text-lg">{{ employeesdata.designation }} — {{ employeesdata.department }}</p>
+
+          <div class="mt-4 grid grid-cols-2 gap-x-10 gap-y-3 text-gray-700">
+            <p><span class="font-semibold text-gray-800">Employee ID:</span> {{ employeesdata.employeid }}</p>
+            <p><span class="font-semibold text-gray-800">Email:</span> {{ employeesdata.email }}</p>
+            <p><span class="font-semibold text-gray-800">DOB:</span> {{ employeesdata.date_of_birth }}</p>
+            <p><span class="font-semibold text-gray-800">Gender:</span> {{ employeesdata.gender }}</p>
+            <p><span class="font-semibold text-gray-800">Joining Date:</span> {{ employeesdata.joining_date }}</p>
+            <p><span class="font-semibold text-gray-800">Manager:</span> {{ employeesdata.manager }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-indigo-50 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <p class="text-3xl font-bold text-indigo-700">₹{{ employeesdata.salary | number }}</p>
+          <p class="text-gray-600 mt-2">Total Salary</p>
+        </div>
+
+        <div class="bg-green-50 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <p class="text-3xl font-bold text-green-700">{{ employeesdata.leaves_taken }}</p>
+          <p class="text-gray-600 mt-2">Leaves Taken</p>
+        </div>
+
+        <div class="bg-yellow-50 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <p class="text-3xl font-bold text-yellow-700">{{ employeesdata.leaves_remaining }}</p>
+          <p class="text-gray-600 mt-2">Leaves Remaining</p>
+        </div>
+
+        <div class="bg-blue-50 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <p class="text-3xl font-bold text-blue-700">{{ employeesdata.experience }} yrs</p>
+          <p class="text-gray-600 mt-2">Experience</p>
+        </div>
+      </div>
+
+      <!-- Additional Details Section -->
+      <div class="bg-white shadow-lg rounded-2xl p-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Additional Information</h2>
+
+        <div class="grid md:grid-cols-2 gap-8 text-gray-700">
+          <div>
+            <h3 class="font-semibold text-gray-800 mb-2">Address</h3>
+            <p>{{ employeesdata.address }}</p>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-gray-800 mb-2">Emergency Contact</h3>
+            <p>{{ employeesdata.emergency_contact.name }} — {{ employeesdata.emergency_contact.phone }}</p>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-gray-800 mb-2">Bank Account</h3>
+            <p>{{ employeesdata.bank_account }}</p>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-gray-800 mb-2">PAN / Tax ID</h3>
+            <p>{{ employeesdata.tax_id }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
