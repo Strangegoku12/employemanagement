@@ -38,6 +38,20 @@ export class EmployementapiService {
     );
   }
 
+   getemployeedashbaord(): Observable<any>{
+          const headers = this.authheader.getAuthHeaders(); //
+
+    return this._http.get(this.baseUrl + '/profile',{headers}).pipe(
+          map((response) => {
+            // manipulate or log data here
+            return response;
+          }),
+          catchError((error) => {
+            console.error('Login Error:', error);
+            return throwError(() => error);
+          })
+    );
+  }
    addemployement(employement:FormData): Observable<any> {
     const url = `${this.baseUrl}/postemployees`;
     return this._http.post(url, employement).pipe(
